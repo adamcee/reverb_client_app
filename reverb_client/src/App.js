@@ -5,19 +5,15 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import MainScreen from './components/MainScreen';
+import Routes from './routing';
 
 class App extends Component {
 
   render() {
-      <Router>
-          <Route exact path="/" component={MainScreen}/>
-      </Router>
-
+      <Routes />
     return (
       <div className="App">
-          <MainScreen />
+          <Routes />
       </div>
     );
   }
