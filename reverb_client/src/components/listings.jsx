@@ -1,10 +1,17 @@
 'use strict';
 import React, { Component } from 'react';
-import { HEADERS } from 'src/utils';
+import { getReverbJSON } from 'src/reverb_api';
 
 class Listings extends Component {
-    state: {
+    state = {
         listings: []
+    }
+
+    componentDidMount() {
+        getReverbJSON('listings/all')
+            .then(json => {
+                console.log('Got json! json is: ', json);
+            })
     }
     render() {
         return (

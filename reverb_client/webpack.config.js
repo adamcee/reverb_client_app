@@ -9,6 +9,7 @@ const config = {
         'react-hot-loader/patch',
         './index.js',
     ],
+    devtool: 'cheap-module-source-map',
     module: {
         rules: [
             {

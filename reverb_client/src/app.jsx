@@ -6,7 +6,8 @@ class App extends Component {
     render() {
         return (
             <div>
-                This is the main screen.
+                <p>This is the main screen.</p>
+                <Listings />
             </div>
         );
     }
