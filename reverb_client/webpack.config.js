@@ -19,7 +19,10 @@ const config = {
         ]
     },
     resolve: {
-        extensions: ['*', '.js', '.jsx']
+        extensions: ['*', '.js', '.jsx'],
+        alias: {
+            src: path.resolve(__dirname, 'src'),
+        }
     },
     output: {
         filename: 'app.js',
