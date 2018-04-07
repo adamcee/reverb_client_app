@@ -15,23 +15,33 @@ class Listings extends Component {
             total: null,
             total_pages: null,
         };
+
+        this.makeListingsRequest = this.makeListingsRequest.bind(this);
+        this.updateListingsJson = this.updateListingsJson.bind(this);
     }
 
     componentDidMount() {
-        getReverbJSON('listings/all?per_page=' + encodeURIComponent(10))
+        this.makeListingsRequest();
+    }
+
+    makeListingsRequest(page = 1) {
+        getReverbJSON('listings/all?per_page=' + encodeURIComponent(10) + '&page=' + encodeURIComponent(page))
             .then(json => {
-                //console.log('Got json! json is: ', json);
-                this.setState(prevState => ({
-                    current_page: json.current_page,
-                    humanized_param: json.humanized_param,
-                    _links: json._links,
-                    listings: json.listings,
-                    per_page: json.per_page,
-                    ships_to: json.ships_to,
-                    total: json.total,
-                    total_pages: json.total_pages,
-                }));
-            })
+                this.updateListingsJson(json);
+            });
+    }
+
+    updateListingsJson(json) {
+        this.setState(prevState => ({
+            current_page: json.current_page,
+            humanized_param: json.humanized_param,
+            _links: json._links,
+            listings: json.listings,
+            per_page: json.per_page,
+            ships_to: json.ships_to,
+            total: json.total,
+            total_pages: json.total_pages,
+        }));
     }
 
     renderListings(listings) {
@@ -39,6 +49,21 @@ class Listings extends Component {
         const renderedListings = listings.map((l, i) => <li key={i}>{l.title}</li>
         );
         return renderedListings;
+    }
+
+    renderPagination(current_page) {
+        const nextPage = current_page + 1;
+        const prevPage = current_page - 1;
+        const renderedPrevPage =
+            <href onClick={() => this.makeListingsRequest(prevPage)}>Prev Page</href>;
+
+        return (
+            <div>
+                {current_page == 1 ? null : renderedPrevPage}
+                <div>Current Page: {current_page}</div>
+                <href onClick={() => this.makeListingsRequest(nextPage)}>Next Page</href>
+            </div>
+        );
     }
 
     render() {
@@ -49,6 +74,7 @@ class Listings extends Component {
                 <ul>
                     {this.renderListings(listings)}
                 </ul>
+                {listings.length ? this.renderPagination(current_page) : null}
             </div>
         );
     }
