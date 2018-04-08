@@ -8,21 +8,18 @@ class Listings extends Component {
         super(props);
         this.state = {
             current_page: null,
-            humanized_param: null,
             listings: [],
-            _links: null,
-            per_page: null,
-            ships_to: null,
-            total: null,
             total_pages: null,
             categories: [],
-            filterByCategoryId: null,
+            filterByCategoryId: "default",
         };
 
         this.makeListingsRequest = this.makeListingsRequest.bind(this);
-        this.updateListingsData = this.updateListingsData.bind(this);
+        this.updateStateWithResponse = this.updateStateWithResponse.bind(this);
         this.updateCategories = this.updateCategories.bind(this);
         this.renderPagination = this.renderPagination.bind(this);
+        this.renderCategoryOptions = this.renderCategoryOptions.bind(this);
+        this.onCategoryChangeHandler = this.onCategoryChangeHandler.bind(this);
     }
 
     componentDidMount() {
@@ -42,20 +39,16 @@ class Listings extends Component {
         }
         getReverbJSON(url)
             .then(json => {
-                this.updateListingsData(json);
+                this.updateStateWithResponse(json, category_uuid);
             });
     }
 
-    updateListingsData(json) {
+    updateStateWithResponse(json, category_uuid) {
         this.setState(prevState => ({
             current_page: json.current_page,
-            humanized_param: json.humanized_param,
-            _links: json._links,
             listings: json.listings,
-            per_page: json.per_page,
-            ships_to: json.ships_to,
-            total: json.total,
             total_pages: json.total_pages,
+            filterByCategoryId: category_uuid,
         }));
     }
 
@@ -65,49 +58,65 @@ class Listings extends Component {
         }));
     }
 
-    renderPagination(current_page) {
+    renderPagination() {
+        const { current_page, filterByCategoryId, total_pages } = this.state;
         if(!current_page) {
             return null;
         }
 
-        const nextPage = current_page + 1;
-        const prevPage = current_page - 1;
+        const optsNextPage = {
+            page: current_page + 1,
+            category_uuid: filterByCategoryId
+        };
+        const optsPrevPage = {
+            page: current_page - 1,
+            category_uuid: filterByCategoryId,
+        };
+
         const renderedPrevPage =
-            <a onClick={() => this.makeListingsRequest({page: prevPage})}>Prev Page</a>;
+            <a onClick={() => this.makeListingsRequest(optsPrevPage)}>Prev Page</a>;
 
         return (
             <div>
                 {current_page == 1 ? null : renderedPrevPage}
-                <div>Current Page: {current_page}</div>
-                <a onClick={() => this.makeListingsRequest({page: nextPage})}>Next Page</a>
+                <div>Current Page: {current_page} / {total_pages}</div>
+                <a onClick={() => this.makeListingsRequest(optsNextPage)}>Next Page</a>
             </div>
         );
     }
 
     renderCategoryOptions(categories) {
+        const { filterByCategoryId } = this.state;
+        const selectVal = filterByCategoryId | "default";
         if(!categories.length) {
             return null;
         }
+
         const cats = categories.map((cat, i) =>
             <option value={cat.uuid} key={i}>{cat.name}</option>
         );
 
-        const onChangeHandler = (e) => this.makeListingsRequest({category_uuid: e.target.value});
         return (
-            <select onChange={onChangeHandler} >
+            <select value={selectVal} onChange={(e) => this.onCategoryChangeHandler(e)} >
+                <option value="default" key={9999999}>-----</option>
                 {cats}
             </select>
         );
     }
 
+    onCategoryChangeHandler(e) {
+        this.makeListingsRequest({category_uuid: e.target.value});
+    }
+
     render() {
-        const { listings, current_page, categories } = this.state;
+        const { listings, categories, filterByCategoryId, current_page } = this.state;
         return (
             <div>
+                <p>DEBUG: filterByCategoryId is {filterByCategoryId}, current_page is {current_page}</p>
                 <p>Listings on Reverb.com. You can filter the results by category below.</p>
                 {this.renderCategoryOptions(categories)}
                 <ListingsList listings={listings} />
-                {listings.length ? this.renderPagination(current_page) : null}
+                {listings.length ? this.renderPagination() : null}
             </div>
         );
     }
