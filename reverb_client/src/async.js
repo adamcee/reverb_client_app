@@ -1,3 +1,4 @@
+'use strict';
 /**
  * Functions for HTTP requests
  */
