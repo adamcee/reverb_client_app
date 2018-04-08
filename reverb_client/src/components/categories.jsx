@@ -33,7 +33,7 @@ class Categories extends Component {
     }
 
     renderCategories(categories) {
-        const rendered = categories.map((c, i) => <li key={i}>{c.name}</li>
+        const rendered = categories.map((c, i) => <li key={i}>{c.full_name}</li>
         );
         return rendered;
     }
