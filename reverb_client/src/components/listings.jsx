@@ -1,6 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { getReverbJSON } from 'src/reverb_api';
+import ListingsList from 'src/components/listings_list';
 
 class Listings extends Component {
     constructor(props) {
@@ -15,11 +16,13 @@ class Listings extends Component {
             total: null,
             total_pages: null,
             categories: [],
+            filterByCategoryId: null,
         };
 
         this.makeListingsRequest = this.makeListingsRequest.bind(this);
         this.updateListingsData = this.updateListingsData.bind(this);
         this.updateCategories = this.updateCategories.bind(this);
+        this.renderPagination = this.renderPagination.bind(this);
     }
 
     componentDidMount() {
@@ -32,10 +35,10 @@ class Listings extends Component {
 
     makeListingsRequest(opts = {}) {
         const page = opts.page ? opts.page : 1;
-        const catUUID = opts.catUUID ? opts.catUUID : null;
+        const category_uuid = opts.category_uuid ? opts.category_uuid : null;
         let url = 'listings/all?per_page=' + encodeURIComponent(10) + '&page=' + encodeURIComponent(page);
-        if(catUUID) {
-            url = url + '&category_uuid=' + encodeURIComponent(catUUID);
+        if(category_uuid) {
+            url = url + '&category_uuid=' + encodeURIComponent(category_uuid);
         }
         getReverbJSON(url)
             .then(json => {
@@ -60,17 +63,6 @@ class Listings extends Component {
         this.setState(prevState => ({
             categories: json.categories,
         }));
-    }
-
-    renderListings(listings) {
-        if(!listings.length) {
-            return null;
-        }
-
-        console.log('Render listings - ', listings);
-        const renderedListings = listings.map((l, i) => <li key={i}>{l.title}</li>
-        );
-        return renderedListings;
     }
 
     renderPagination(current_page) {
@@ -100,8 +92,9 @@ class Listings extends Component {
             <option value={cat.uuid} key={i}>{cat.name}</option>
         );
 
+        const onChangeHandler = (e) => this.makeListingsRequest({category_uuid: e.target.value});
         return (
-            <select> 
+            <select onChange={onChangeHandler} >
                 {cats}
             </select>
         );
@@ -113,9 +106,7 @@ class Listings extends Component {
             <div>
                 <p>Listings on Reverb.com. You can filter the results by category below.</p>
                 {this.renderCategoryOptions(categories)}
-                <ul>
-                    {this.renderListings(listings)}
-                </ul>
+                <ListingsList listings={listings} />
                 {listings.length ? this.renderPagination(current_page) : null}
             </div>
         );
