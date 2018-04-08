@@ -33,7 +33,6 @@ class Categories extends Component {
     }
 
     renderCategories(categories) {
-        console.log('Render categories - ', categories);
         const rendered = categories.map((c, i) => <li key={i}>{c.name}</li>
         );
         return rendered;
