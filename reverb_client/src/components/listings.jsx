@@ -14,24 +14,36 @@ class Listings extends Component {
             ships_to: null,
             total: null,
             total_pages: null,
+            categories: [],
         };
 
         this.makeListingsRequest = this.makeListingsRequest.bind(this);
-        this.updateListingsJson = this.updateListingsJson.bind(this);
+        this.updateListingsData = this.updateListingsData.bind(this);
+        this.updateCategories = this.updateCategories.bind(this);
     }
 
     componentDidMount() {
         this.makeListingsRequest();
-    }
-
-    makeListingsRequest(page = 1) {
-        getReverbJSON('listings/all?per_page=' + encodeURIComponent(10) + '&page=' + encodeURIComponent(page))
+        getReverbJSON('categories/flat')
             .then(json => {
-                this.updateListingsJson(json);
+                this.updateCategories(json);
             });
     }
 
-    updateListingsJson(json) {
+    makeListingsRequest(opts = {}) {
+        const page = opts.page ? opts.page : 1;
+        const catUUID = opts.catUUID ? opts.catUUID : null;
+        let url = 'listings/all?per_page=' + encodeURIComponent(10) + '&page=' + encodeURIComponent(page);
+        if(catUUID) {
+            url = url + '&category_uuid=' + encodeURIComponent(catUUID);
+        }
+        getReverbJSON(url)
+            .then(json => {
+                this.updateListingsData(json);
+            });
+    }
+
+    updateListingsData(json) {
         this.setState(prevState => ({
             current_page: json.current_page,
             humanized_param: json.humanized_param,
@@ -44,7 +56,17 @@ class Listings extends Component {
         }));
     }
 
+    updateCategories(json) {
+        this.setState(prevState => ({
+            categories: json.categories,
+        }));
+    }
+
     renderListings(listings) {
+        if(!listings.length) {
+            return null;
+        }
+
         console.log('Render listings - ', listings);
         const renderedListings = listings.map((l, i) => <li key={i}>{l.title}</li>
         );
@@ -52,25 +74,45 @@ class Listings extends Component {
     }
 
     renderPagination(current_page) {
+        if(!current_page) {
+            return null;
+        }
+
         const nextPage = current_page + 1;
         const prevPage = current_page - 1;
         const renderedPrevPage =
-            <a onClick={() => this.makeListingsRequest(prevPage)}>Prev Page</a>;
+            <a onClick={() => this.makeListingsRequest({page: prevPage})}>Prev Page</a>;
 
         return (
             <div>
                 {current_page == 1 ? null : renderedPrevPage}
                 <div>Current Page: {current_page}</div>
-                <a onClick={() => this.makeListingsRequest(nextPage)}>Next Page</a>
+                <a onClick={() => this.makeListingsRequest({page: nextPage})}>Next Page</a>
             </div>
         );
     }
 
+    renderCategoryOptions(categories) {
+        if(!categories.length) {
+            return null;
+        }
+        const cats = categories.map((cat, i) =>
+            <option value={cat.uuid} key={i}>{cat.name}</option>
+        );
+
+        return (
+            <select> 
+                {cats}
+            </select>
+        );
+    }
+
     render() {
-        const { listings, current_page } = this.state;
+        const { listings, current_page, categories } = this.state;
         return (
             <div>
                 <p>Listings on Reverb.com. You can filter the results by category below.</p>
+                {this.renderCategoryOptions(categories)}
                 <ul>
                     {this.renderListings(listings)}
                 </ul>
