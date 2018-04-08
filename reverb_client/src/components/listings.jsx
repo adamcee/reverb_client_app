@@ -109,10 +109,9 @@ class Listings extends Component {
     }
 
     render() {
-        const { listings, categories, filterByCategoryId, current_page } = this.state;
+        const { listings, categories } = this.state;
         return (
             <div>
-                <p>DEBUG: filterByCategoryId is {filterByCategoryId}, current_page is {current_page}</p>
                 <p>Listings on Reverb.com. You can filter the results by category below.</p>
                 {this.renderCategoryOptions(categories)}
                 <ListingsList listings={listings} />
