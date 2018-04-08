@@ -11,7 +11,7 @@ class Listings extends Component {
             listings: [],
             total_pages: null,
             categories: [],
-            filterByCategoryId: "default",
+            filterByCategoryId: null,
         };
 
         this.makeListingsRequest = this.makeListingsRequest.bind(this);

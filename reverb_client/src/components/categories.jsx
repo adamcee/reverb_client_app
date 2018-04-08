@@ -7,10 +7,12 @@ class Categories extends Component {
         super(props);
         this.state = {
             categories: [],
+            filterBy: "",
         };
 
         this.makeCategoryRequest = this.makeCategoryRequest.bind(this);
         this.updateCategories = this.updateCategories.bind(this);
+        this.onFilterByChange = this.onFilterByChange.bind(this);
     }
 
     componentDidMount() {
@@ -37,14 +39,26 @@ class Categories extends Component {
         return rendered;
     }
 
+    onFilterByChange(event) {
+        const updated =  event.target.value;
+        this.setState(prev => ({
+            filterBy: updated,
+        }));
+    }
+
 
     render() {
-        const { categories } = this.state;
+        const { categories, filterBy } = this.state;
+        const filteredCategories = categories.filter(cat => cat.full_name.toLowerCase().includes(filterBy.toLowerCase()));
         return (
             <div>
                 <p>Categories on Reverb.com.</p>
+                <label>
+                    Filter by:
+                    <input type="text" value={filterBy} onChange={this.onFilterByChange} />
+                </label>
                 <ul>
-                    {this.renderCategories(categories)}
+                    {this.renderCategories(filteredCategories)}
                 </ul>
             </div>
         );
