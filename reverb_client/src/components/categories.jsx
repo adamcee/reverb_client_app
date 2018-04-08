@@ -17,7 +17,7 @@ class Categories extends Component {
         this.makeCategoryRequest();
     }
 
-    makeCategoryRequest(page = 1) {
+    makeCategoryRequest() {
         getReverbJSON('categories/flat')
             .then(json => {
                 this.updateCategories(json);
