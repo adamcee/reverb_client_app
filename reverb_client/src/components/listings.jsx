@@ -55,13 +55,13 @@ class Listings extends Component {
         const nextPage = current_page + 1;
         const prevPage = current_page - 1;
         const renderedPrevPage =
-            <href onClick={() => this.makeListingsRequest(prevPage)}>Prev Page</href>;
+            <a onClick={() => this.makeListingsRequest(prevPage)}>Prev Page</a>;
 
         return (
             <div>
                 {current_page == 1 ? null : renderedPrevPage}
                 <div>Current Page: {current_page}</div>
-                <href onClick={() => this.makeListingsRequest(nextPage)}>Next Page</href>
+                <a onClick={() => this.makeListingsRequest(nextPage)}>Next Page</a>
             </div>
         );
     }
