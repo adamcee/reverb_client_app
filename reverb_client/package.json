@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/adamcee/reverb_client_app#readme",
   "dependencies": {
-    "immutable": "^3.8.2",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-router": "^4.2.0",
