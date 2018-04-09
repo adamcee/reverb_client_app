@@ -4,7 +4,7 @@
   "description": "frontend app to interact with the reverb.com api",
   "private": true,
   "engines": {
-    "node": "8.11.0"
+    "node": ">=6.11.0"
   },
   "main": "app.js",
   "scripts": {
