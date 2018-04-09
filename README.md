@@ -5,6 +5,7 @@ If you don't have node.js, [install node.js](https://nodejs.org/en/download/pack
 
 Yarn is not necessary but is preferred as a package manager over npm, because it should build project dependencies more consistently. [Installation notes are here](https://yarnpkg.com/en/docs/install).
 
-1. `yarn` or `npm install`
-2. `npm start`
-3. Go to [http://localhost:8080](http://localhost:8080)
+1. `cd reverb_client_app/reverb_client` 
+2. `yarn` or `npm install`
+3. `npm start`
+4. Go to [http://localhost:8080](http://localhost:8080)
