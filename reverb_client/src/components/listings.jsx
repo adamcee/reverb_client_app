@@ -44,6 +44,7 @@ class Listings extends Component {
     }
 
     updateStateWithResponse(json, category_uuid) {
+        console.log('updateStateWithResponse cat_uuid ', category_uuid);
         this.setState(prevState => ({
             current_page: json.current_page,
             listings: json.listings,
@@ -87,7 +88,7 @@ class Listings extends Component {
 
     renderCategoryOptions(categories) {
         const { filterByCategoryId } = this.state;
-        const selectVal = filterByCategoryId | "default";
+        const selectVal = filterByCategoryId ? filterByCategoryId : "default";
         if(!categories.length) {
             return null;
         }
