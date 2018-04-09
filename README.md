@@ -8,7 +8,7 @@ Yarn is not necessary but is preferred as a package manager over npm, because it
 1. `cd reverb_client_app/reverb_client` 
 2. `yarn` or `npm install`. 
 
-NOTE: Node.js v8.11.0 is specified in package.json because of [an open issue with webpack](https://github.com/webpack/webpack/issues/6579). However the application should still run for node.js >=v6.9.1. For yarn, if you are not using node.js version 8.11.0, run `yarn --ignore-engines`. `npm install` should work fine.
+NOTE: Node.js v6.11.5 is specified in package.json because of [an open issue with webpack](https://github.com/webpack/webpack/issues/6579). However the application should still build and run for node.js v6.9.1. For yarn, if you are not using node.js version 8.11.0, run `yarn --ignore-engines`. `npm install` should work fine. It is recommended to install nvm and use it to get the correct version of node.js.
 
 You can use [nvm](  https://github.com/creationix/nvm#installation) to install and switch between different versions of node.js. 
 
