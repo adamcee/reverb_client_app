@@ -12,7 +12,7 @@ class App extends Component {
                 <Router>
                     <div>
                         <Route path="/" component={MainScreen} />
-                        <Route path="/listings" component={Listings} />
+                        <Route path="/listings/:cat_uuid?" component={Listings} />
                         <Route path="/categories" component={Categories} />
                     </div>
                 </Router>

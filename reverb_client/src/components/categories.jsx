@@ -1,6 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import { getReverbJSON } from 'src/reverb_api';
+import { Link } from 'react-router-dom';
 
 class Categories extends Component {
     constructor(props) {
@@ -33,7 +34,10 @@ class Categories extends Component {
     }
 
     renderCategories(categories) {
-        const rendered = categories.map((c, i) => <li key={i}>{c.full_name}</li>
+        const rendered = categories.map((cat, i) =>
+            <li key={i}>
+                <Link to={`/listings/${cat.uuid}`}>{cat.full_name}</Link>
+            </li>
         );
         return rendered;
     }

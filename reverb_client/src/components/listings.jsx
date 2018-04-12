@@ -23,13 +23,20 @@ class Listings extends Component {
     }
 
     componentDidMount() {
-        this.makeListingsRequest();
+        const cat_uuid = this.props.match.params.cat_uuid;
+        const opts = {};
+        if(cat_uuid){
+            opts.category_uuid = cat_uuid;
+        }
+
+        this.makeListingsRequest(opts);
         getReverbJSON('categories/flat')
             .then(json => {
                 this.updateCategories(json);
             });
     }
 
+    // This will also update state.category_uuid
     makeListingsRequest(opts = {}) {
         const page = opts.page ? opts.page : 1;
         const category_uuid = opts.category_uuid ? opts.category_uuid : null;
