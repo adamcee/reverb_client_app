@@ -39,7 +39,11 @@ class Listings extends Component {
     // This will also update state.category_uuid
     makeListingsRequest(opts = {}) {
         const page = opts.page ? opts.page : 1;
-        const category_uuid = opts.category_uuid ? opts.category_uuid : null;
+        let category_uuid = opts.category_uuid ? opts.category_uuid : null;
+        if(category_uuid == "default"){
+            category_uuid = null;
+        }
+
         let url = 'listings/all?per_page=' + encodeURIComponent(10) + '&page=' + encodeURIComponent(page);
         if(category_uuid) {
             url = url + '&category_uuid=' + encodeURIComponent(category_uuid);
